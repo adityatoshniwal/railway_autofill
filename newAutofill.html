@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Autofill</title>
+    <style>
+        * {
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+        }
+        ul {
+            padding: 0;
+            list-style-type: none;
+        }
+
+        input, select, button {
+            margin: 5px 5px 5px 5px;
+            padding: 5px;
+        }
+        select {
+            height: 35px;
+        }
+        button, a {
+            border: 0.5px solid black;
+            padding: 10px;
+            text-decoration: none;
+        }
+        
+        button:hover, a:hover {
+            cursor: pointer;
+            background:green;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <h5>Autofill For Irctc New Website - Author: Aditya Toshniwal</h5>
+    <div>
+        <ul id='passengers'>
+            <li>
+                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
+                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
+                <select formcontrolname='passengerGender'>
+                    <option value=''>Gender</option>
+                    <option value='M'>Male</option>
+                    <option value='F'>Female</option>
+                    <option value='T'>Transgender</option>
+                </select>
+                <select formcontrolname='passengerBerthChoice'>
+                    <option value=''>Choose Berth</option>
+                    <option value='LB'>Lower</option>
+                    <option value='MB'>Middle</option>
+                    <option value='UB'>Upper</option>
+                    <option value='SL'>Side Lower</option>
+                    <option value='SU'>Side Upper</option>
+                </select>
+            </li>
+            <li>
+                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
+                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
+                <select formcontrolname='passengerGender'>
+                    <option value=''>Gender</option>
+                    <option value='M'>Male</option>
+                    <option value='F'>Female</option>
+                    <option value='T'>Transgender</option>
+                </select>
+                <select formcontrolname='passengerBerthChoice'>
+                    <option value=''>Choose Berth</option>
+                    <option value='LB'>Lower</option>
+                    <option value='MB'>Middle</option>
+                    <option value='UB'>Upper</option>
+                    <option value='SL'>Side Lower</option>
+                    <option value='SU'>Side Upper</option>
+                </select>
+            </li>
+            <li>
+                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
+                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
+                <select formcontrolname='passengerGender'>
+                    <option value=''>Gender</option>
+                    <option value='M'>Male</option>
+                    <option value='F'>Female</option>
+                    <option value='T'>Transgender</option>
+                </select>
+                <select formcontrolname='passengerBerthChoice'>
+                    <option value=''>Choose Berth</option>
+                    <option value='LB'>Lower</option>
+                    <option value='MB'>Middle</option>
+                    <option value='UB'>Upper</option>
+                    <option value='SL'>Side Lower</option>
+                    <option value='SU'>Side Upper</option>
+                </select>
+            </li>
+            <li>
+                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
+                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
+                <select formcontrolname='passengerGender'>
+                    <option value=''>Gender</option>
+                    <option value='M'>Male</option>
+                    <option value='F'>Female</option>
+                    <option value='T'>Transgender</option>
+                </select>
+                <select formcontrolname='passengerBerthChoice'>
+                    <option value=''>Choose Berth</option>
+                    <option value='LB'>Lower</option>
+                    <option value='MB'>Middle</option>
+                    <option value='UB'>Upper</option>
+                    <option value='SL'>Side Lower</option>
+                    <option value='SU'>Side Upper</option>
+                </select>
+            </li>                                    
+        </ul>
+    </div>
+    <div>
+        <div>
+            <input type="checkbox" formcontrolname="autoUpgradation">Auto-upgrade</input>
+        </div>
+        <div>
+            <span>Mobile: </span><input type="text" formcontrolname="mobileNumber" autocomplete="on">
+        </div>
+    </div>
+    <div style='margin-top: 10px'>
+        <textarea id='txtAuto' cols='100' rows='10'></textarea>
+    </div>
+    <div>
+        <button id='genAuto'>Generate Autofill</button>
+        <a href="" id="dragBtn">Drag to bookmark</a>
+    </div>            
+    <div>
+        
+    </div>
+
+<script>
+    var txtAuto = 'Not generated';
+
+    function genAutofill() {
+        var lis = document.querySelectorAll('li');
+        var passList = [];
+        lis.forEach(li => {
+            let name = li.querySelector('*[formcontrolname="passengerName"]'),
+                age = li.querySelector('*[formcontrolname="passengerAge"]'),
+                gender = li.querySelector('*[formcontrolname="passengerGender"]'),
+                berth = li.querySelector('*[formcontrolname="passengerBerthChoice"]');
+
+            if(name.value.trim() != '') {
+                passList.push([
+                    name.value, age.value, gender.value, berth.value
+                ]);
+            }
+        });
+        
+        return (
+            `javascript: (function() {
+                let passList = `+JSON.stringify(passList)+`;
+                let autoUp = `+document.querySelector('*[formcontrolname="autoUpgradation"]').checked+`;
+                let mobNo = '`+document.querySelector('*[formcontrolname="mobileNumber"]').value+`';
+                let addBtn = document.querySelectorAll('.updatesDiv a .prenext')[0].parentNode;
+                for(let i=0; i<passList.length; i++){
+                    let names = document.querySelectorAll('.updatesDiv .passengerDiv app-passenger');
+                    if(names.length < i+1) {
+                        addBtn.click();
+                        names = document.querySelectorAll('.updatesDiv .passengerDiv app-passenger');
+                    }
+                    let el = names[i];
+                    el.querySelector('*[formcontrolname="passengerName"]').value = passList[i][0];
+                    el.querySelector('*[formcontrolname="passengerAge"]').value = passList[i][1];
+                    el.querySelector('*[formcontrolname="passengerGender"]').value= passList[i][2];
+                    el.querySelector('*[formcontrolname="passengerBerthChoice"]').value= passList[i][3];
+                }
+                document.querySelector('*[formcontrolname="autoUpgradation"]').checked = autoUp;
+                document.querySelector('*[formcontrolname="mobileNumber"]').value = mobNo;
+                document.querySelector('*[formcontrolname="captcha"]').focus();
+            })()`.replace(/[\r\n\t]+/gm,'')
+        );
+    }
+    
+
+    document.getElementById('genAuto').onclick = function(e) {
+        document.getElementById('txtAuto').value = genAutofill();
+        document.getElementById('dragBtn').href = document.getElementById('txtAuto').value; 
+    };
+
+</script>
+</body>
+</html>
