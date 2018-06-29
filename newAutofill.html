@@ -158,6 +158,7 @@
                 let autoUp = `+document.querySelector('*[formcontrolname="autoUpgradation"]').checked+`;
                 let mobNo = '`+document.querySelector('*[formcontrolname="mobileNumber"]').value+`';
                 let addBtn = document.querySelectorAll('.updatesDiv a .prenext')[0].parentNode;
+
                 for(let i=0; i<passList.length; i++){
                     let names = document.querySelectorAll('.updatesDiv .passengerDiv app-passenger');
                     if(names.length < i+1) {
@@ -165,14 +166,33 @@
                         names = document.querySelectorAll('.updatesDiv .passengerDiv app-passenger');
                     }
                     let el = names[i];
+                    
                     el.querySelector('*[formcontrolname="passengerName"]').value = passList[i][0];
+                    el.querySelector('*[formcontrolname="passengerName"]').dispatchEvent(new Event('input'));
+                    
                     el.querySelector('*[formcontrolname="passengerAge"]').value = passList[i][1];
+                    el.querySelector('*[formcontrolname="passengerAge"]').dispatchEvent(new Event('input'));
+
                     el.querySelector('*[formcontrolname="passengerGender"]').value= passList[i][2];
+                    el.querySelector('*[formcontrolname="passengerGender"]').dispatchEvent(new Event('change'));
+
                     el.querySelector('*[formcontrolname="passengerBerthChoice"]').value= passList[i][3];
+                    el.querySelector('*[formcontrolname="passengerBerthChoice"]').dispatchEvent(new Event('change'));
                 }
-                document.querySelector('*[formcontrolname="autoUpgradation"]').checked = autoUp;
-                document.querySelector('*[formcontrolname="mobileNumber"]').value = mobNo;
-                document.querySelector('*[formcontrolname="captcha"]').focus();
+                if(document.querySelector('*[formcontrolname="autoUpgradation"]')){
+                    document.querySelector('*[formcontrolname="autoUpgradation"]').checked = autoUp;
+                }
+                if(mobNo.trim() != '') {
+                    document.querySelector('*[formcontrolname="mobileNumber"]').value = mobNo;
+                }
+
+                if(document.querySelector('*[formcontrolname="captcha"]')){
+                    document.querySelector('*[formcontrolname="captcha"]').focus();    
+                }
+                else if(document.querySelector('#nlpAnswer')){
+                    document.querySelector('#nlpAnswer').focus();
+                }
+                
             })()`.replace(/[\r\n\t]+/gm,'')
         );
     }
