@@ -33,108 +33,67 @@
             background:green;
             color: white;
         }
-
     </style>
 </head>
 <body>
-    <h5>Autofill For Irctc New Website - Author: Aditya Toshniwal - v1</h5>
+    <h5>Autofill For Irctc New Website - Author: Aditya Toshniwal - v2</h5>
     <div>
-        <ul id='passengers'>
-            <li>
-                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
-                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
-                <select formcontrolname='passengerGender'>
-                    <option value=''>Gender</option>
-                    <option value='M'>Male</option>
-                    <option value='F'>Female</option>
-                    <option value='T'>Transgender</option>
-                </select>
-                <select formcontrolname='passengerBerthChoice'>
-                    <option value=''>Choose Berth</option>
-                    <option value='LB'>Lower</option>
-                    <option value='MB'>Middle</option>
-                    <option value='UB'>Upper</option>
-                    <option value='SL'>Side Lower</option>
-                    <option value='SU'>Side Upper</option>
-                </select>
-            </li>
-            <li>
-                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
-                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
-                <select formcontrolname='passengerGender'>
-                    <option value=''>Gender</option>
-                    <option value='M'>Male</option>
-                    <option value='F'>Female</option>
-                    <option value='T'>Transgender</option>
-                </select>
-                <select formcontrolname='passengerBerthChoice'>
-                    <option value=''>Choose Berth</option>
-                    <option value='LB'>Lower</option>
-                    <option value='MB'>Middle</option>
-                    <option value='UB'>Upper</option>
-                    <option value='SL'>Side Lower</option>
-                    <option value='SU'>Side Upper</option>
-                </select>
-            </li>
-            <li>
-                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
-                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
-                <select formcontrolname='passengerGender'>
-                    <option value=''>Gender</option>
-                    <option value='M'>Male</option>
-                    <option value='F'>Female</option>
-                    <option value='T'>Transgender</option>
-                </select>
-                <select formcontrolname='passengerBerthChoice'>
-                    <option value=''>Choose Berth</option>
-                    <option value='LB'>Lower</option>
-                    <option value='MB'>Middle</option>
-                    <option value='UB'>Upper</option>
-                    <option value='SL'>Side Lower</option>
-                    <option value='SU'>Side Upper</option>
-                </select>
-            </li>
-            <li>
-                <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
-                <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
-                <select formcontrolname='passengerGender'>
-                    <option value=''>Gender</option>
-                    <option value='M'>Male</option>
-                    <option value='F'>Female</option>
-                    <option value='T'>Transgender</option>
-                </select>
-                <select formcontrolname='passengerBerthChoice'>
-                    <option value=''>Choose Berth</option>
-                    <option value='LB'>Lower</option>
-                    <option value='MB'>Middle</option>
-                    <option value='UB'>Upper</option>
-                    <option value='SL'>Side Lower</option>
-                    <option value='SU'>Side Upper</option>
-                </select>
-            </li>                                    
-        </ul>
+        <ul id='passengers'></ul>
     </div>
     <div>
-        <div>
-            <input type="checkbox" formcontrolname="autoUpgradation">Auto-upgrade</input>
-        </div>
-        <div>
-            <span>Mobile: </span><input type="text" formcontrolname="mobileNumber" autocomplete="on">
-        </div>
-    </div>
-    <div style='margin-top: 10px'>
-        <textarea id='txtAuto' cols='100' rows='10'></textarea>
+        <span>Mobile: </span><input type="text" formcontrolname="mobileNumber" autocomplete="on">
+        <input type="checkbox" formcontrolname="autoUpgradation">Auto-upgrade</input>
     </div>
     <div>
         <button id='genAuto'>Generate Autofill</button>
-        <a href="" id="dragBtn">Drag to bookmark</a>
-    </div>            
+        <input type="text" id="txtBookmarkBtn" placeholder="Name for bookmark"/>
+        <a href="" id="btnBookmark">Drag to bookmark</a>
+    </div>
+    <br/>
     <div>
-        
+        <span>Note : Drag the autofill button to bookmark bar. Tested in Chrome only. Use at your own risk !! :P</span>
+    </div>
+    <div style='margin-top: 10px'>
+        <textarea id='txtAuto' cols='92' rows='5'></textarea>
     </div>
 
 <script>
+
     var txtAuto = 'Not generated';
+
+    for(let i=1; i<=6; i++) {
+        var li = document.createElement('li');
+        li.innerHTML = `
+            <span>`+i+`. </span>
+            <span>Name: </span><input type='text' formcontrolname='passengerName' autocomplete="on" />
+            <span>Age: </span><input type='text' formcontrolname='passengerAge' autocomplete="on"/>
+            <select formcontrolname='passengerGender'>
+                <option value=''>Gender</option>
+                <option value='M'>Male</option>
+                <option value='F'>Female</option>
+                <option value='T'>Transgender</option>
+            </select>
+            <select formcontrolname='passengerBerthChoice'>
+                <option value=''>Choose Berth</option>
+                <option value='LB'>Lower</option>
+                <option value='MB'>Middle</option>
+                <option value='UB'>Upper</option>
+                <option value='SL'>Side Lower</option>
+                <option value='SU'>Side Upper</option>
+            </select>
+        `;
+        document.getElementById('passengers').appendChild(li);
+    }
+
+    var txtBookmarkBtn = document.getElementById('txtBookmarkBtn');
+    txtBookmarkBtn.onkeyup = function(e) {
+        if(txtBookmarkBtn.value.trim() === '') {
+            document.getElementById('btnBookmark').innerHTML = "Drag to bookmark"
+        }
+        else {
+            document.getElementById('btnBookmark').innerHTML = txtBookmarkBtn.value;
+        }
+    }
 
     function genAutofill() {
         var lis = document.querySelectorAll('li');
@@ -200,7 +159,7 @@
 
     document.getElementById('genAuto').onclick = function(e) {
         document.getElementById('txtAuto').value = genAutofill();
-        document.getElementById('dragBtn').href = document.getElementById('txtAuto').value; 
+        document.getElementById('btnBookmark').href = document.getElementById('txtAuto').value;
     };
 
 </script>
