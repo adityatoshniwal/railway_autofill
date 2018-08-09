@@ -8,7 +8,7 @@
     <style>
         * {
             font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
         ul {
             padding: 0;
@@ -33,12 +33,23 @@
             background:green;
             color: white;
         }
+
+        .header {
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 3px 0px;
+        }
     </style>
 </head>
 <body>
-    <h5>Autofill For Irctc New Website - Author: Aditya Toshniwal - v2</h5>
+    <h5>Autofill For Irctc New Website - Author: Aditya Toshniwal - v3</h5>
+    <div class="header">Passengers:</div>
     <div>
         <ul id='passengers'></ul>
+    </div>
+    <div class="header">Child Passengers:</div>
+    <div>
+        <ul id='child'></ul>
     </div>
     <div>
         <span>Mobile: </span><input type="text" formcontrolname="mobileNumber" autocomplete="on">
@@ -85,6 +96,29 @@
         document.getElementById('passengers').appendChild(li);
     }
 
+    for(let i=1; i<=2; i++) {
+        var li = document.createElement('li');
+        li.innerHTML = `
+            <span>`+i+`. </span>
+            <span>Name: </span><input type='text' formcontrolname='name' autocomplete="on" />
+            <select formcontrolname="age">
+                <option value="">Age</option>
+                <option value="0">Below one year</option>
+                <option value="1">One year</option>
+                <option value="2">Two years</option>
+                <option value="3">Three years</option>
+                <option value="4">Four years</option>
+            </select>
+            <select formcontrolname='gender'>
+                <option value=''>Gender</option>
+                <option value='M'>Male</option>
+                <option value='F'>Female</option>
+            </select>
+        `;
+        document.getElementById('child').appendChild(li);
+    }
+
+
     var txtBookmarkBtn = document.getElementById('txtBookmarkBtn');
     txtBookmarkBtn.onkeyup = function(e) {
         if(txtBookmarkBtn.value.trim() === '') {
@@ -96,8 +130,10 @@
     }
 
     function genAutofill() {
-        var lis = document.querySelectorAll('li');
         var passList = [];
+        var childList = [];
+
+        var lis = document.querySelectorAll('#passengers li');
         lis.forEach(li => {
             let name = li.querySelector('*[formcontrolname="passengerName"]'),
                 age = li.querySelector('*[formcontrolname="passengerAge"]'),
@@ -110,14 +146,28 @@
                 ]);
             }
         });
+
+        lis = document.querySelectorAll('#child li');
+        lis.forEach(li => {
+            let name = li.querySelector('*[formcontrolname="name"]'),
+                age = li.querySelector('*[formcontrolname="age"]'),
+                gender = li.querySelector('*[formcontrolname="gender"]');
+
+            if(name.value.trim() != '') {
+                childList.push([
+                    name.value, age.value, gender.value
+                ]);
+            }
+        });
         
         return (
             `javascript: (function() {
                 let passList = `+JSON.stringify(passList)+`;
+                let childList = `+JSON.stringify(childList)+`;
                 let autoUp = `+document.querySelector('*[formcontrolname="autoUpgradation"]').checked+`;
                 let mobNo = '`+document.querySelector('*[formcontrolname="mobileNumber"]').value+`';
                 let addBtn = document.querySelectorAll('.updatesDiv a .prenext')[0].parentNode;
-
+                let childAddBtn = document.querySelectorAll('.updatesDiv .pip-detail a')[0];
                 for(let i=0; i<passList.length; i++){
                     let names = document.querySelectorAll('.updatesDiv .passengerDiv app-passenger');
                     if(names.length < i+1) {
@@ -138,6 +188,25 @@
                     el.querySelector('*[formcontrolname="passengerBerthChoice"]').value= passList[i][3];
                     el.querySelector('*[formcontrolname="passengerBerthChoice"]').dispatchEvent(new Event('change'));
                 }
+
+                for(let i=0; i<childList.length; i++){
+                    let names = document.querySelectorAll('*[formarrayname="infantList"] .row.ng-star-inserted');
+                    if(names.length < i+1) {
+                        childAddBtn.click();
+                        names = document.querySelectorAll('*[formarrayname="infantList"] .row.ng-star-inserted');
+                    }
+                    let el = names[i];
+                    
+                    el.querySelector('*[formcontrolname="name"]').value = childList[i][0];
+                    el.querySelector('*[formcontrolname="name"]').dispatchEvent(new Event('input'));
+                    
+                    el.querySelector('*[formcontrolname="age"]').value = childList[i][1];
+                    el.querySelector('*[formcontrolname="age"]').dispatchEvent(new Event('change'));
+
+                    el.querySelector('*[formcontrolname="gender"]').value= childList[i][2];
+                    el.querySelector('*[formcontrolname="gender"]').dispatchEvent(new Event('change'));
+                }
+
                 if(document.querySelector('*[formcontrolname="autoUpgradation"]')){
                     document.querySelector('*[formcontrolname="autoUpgradation"]').checked = autoUp;
                 }
