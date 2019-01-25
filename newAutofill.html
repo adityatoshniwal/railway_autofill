@@ -210,6 +210,8 @@
                 if(document.querySelector('*[formcontrolname="autoUpgradation"]')){
                     document.querySelector('*[formcontrolname="autoUpgradation"]').checked = autoUp;
                 }
+                document.querySelector('#travelInsuranceOptedYes').checked = true;
+
                 if(mobNo.trim() != '') {
                     document.querySelector('*[formcontrolname="mobileNumber"]').value = mobNo;
                 }
