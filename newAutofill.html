@@ -85,12 +85,14 @@
                 <option value='T'>Transgender</option>
             </select>
             <select formcontrolname='passengerBerthChoice'>
-                <option value=''>Choose Berth</option>
+                <option value>No Preference*</option>
                 <option value='LB'>Lower</option>
                 <option value='MB'>Middle</option>
                 <option value='UB'>Upper</option>
                 <option value='SL'>Side Lower</option>
                 <option value='SU'>Side Upper</option>
+                <option value='WS'>Window Side</option>
+                
             </select>
         `;
         document.getElementById('passengers').appendChild(li);
@@ -211,6 +213,7 @@
                     document.querySelector('*[formcontrolname="autoUpgradation"]').checked = autoUp;
                 }
                 document.querySelector('#travelInsuranceOptedYes').checked = true;
+                document.querySelector('#travelInsuranceOptedYes').dispatchEvent(new Event('change'));
 
                 if(mobNo.trim() != '') {
                     document.querySelector('*[formcontrolname="mobileNumber"]').value = mobNo;
