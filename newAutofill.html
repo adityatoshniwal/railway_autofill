@@ -27,7 +27,7 @@
             padding: 10px;
             text-decoration: none;
         }
-        
+
         button:hover, a:hover {
             cursor: pointer;
             background:green;
@@ -53,7 +53,7 @@
     </div>
     <div>
         <span>Mobile: </span><input type="text" formcontrolname="mobileNumber" autocomplete="on">
-        <input type="checkbox" formcontrolname="autoUpgradation">Auto-upgrade</input>
+        <input type="checkbox" formcontrolname="autoUpgradationSelected">Auto-upgrade</input>
     </div>
     <div>
         <button id='genAuto'>Generate Autofill</button>
@@ -92,7 +92,7 @@
                 <option value='SL'>Side Lower</option>
                 <option value='SU'>Side Upper</option>
                 <option value='WS'>Window Side</option>
-                
+
             </select>
         `;
         document.getElementById('passengers').appendChild(li);
@@ -161,26 +161,26 @@
                 ]);
             }
         });
-        
+
         return (
             `javascript: (function() {
                 let passList = `+JSON.stringify(passList)+`;
                 let childList = `+JSON.stringify(childList)+`;
-                let autoUp = `+document.querySelector('*[formcontrolname="autoUpgradation"]').checked+`;
+                let autoUp = `+document.querySelector('*[formcontrolname="autoUpgradationSelected"]').checked+` || false;
                 let mobNo = '`+document.querySelector('*[formcontrolname="mobileNumber"]').value+`';
-                let addBtn = document.querySelectorAll('.updatesDiv a .prenext')[0].parentNode;
-                let childAddBtn = document.querySelectorAll('.updatesDiv .pip-detail a')[0];
+                let addBtn = document.querySelectorAll('a .prenext')[0].parentNode;
+                let childAddBtn = document.querySelectorAll('a .prenext')[1].parentNode;
                 for(let i=0; i<passList.length; i++){
-                    let names = document.querySelectorAll('.updatesDiv .passengerDiv app-passenger');
+                    let names = document.querySelectorAll('.ng-star-inserted app-passenger');
                     if(names.length < i+1) {
                         addBtn.click();
-                        names = document.querySelectorAll('.updatesDiv .passengerDiv app-passenger');
+                        names = document.querySelectorAll('.ng-star-inserted app-passenger');
                     }
                     let el = names[i];
-                    
-                    el.querySelector('*[formcontrolname="passengerName"]').value = passList[i][0];
-                    el.querySelector('*[formcontrolname="passengerName"]').dispatchEvent(new Event('input'));
-                    
+
+                    el.querySelector('*[formcontrolname="passengerName"] input').value = passList[i][0];
+                    el.querySelector('*[formcontrolname="passengerName"] input').dispatchEvent(new Event('input'));
+
                     el.querySelector('*[formcontrolname="passengerAge"]').value = passList[i][1];
                     el.querySelector('*[formcontrolname="passengerAge"]').dispatchEvent(new Event('input'));
 
@@ -198,10 +198,10 @@
                         names = document.querySelectorAll('*[formarrayname="infantList"] .row.ng-star-inserted');
                     }
                     let el = names[i];
-                    
-                    el.querySelector('*[formcontrolname="name"]').value = childList[i][0];
+
+                    el.querySelector('*[formcontrolname="name"] input').value = childList[i][0];
                     el.querySelector('*[formcontrolname="name"]').dispatchEvent(new Event('input'));
-                    
+
                     el.querySelector('*[formcontrolname="age"]').value = childList[i][1];
                     el.querySelector('*[formcontrolname="age"]').dispatchEvent(new Event('change'));
 
@@ -209,27 +209,28 @@
                     el.querySelector('*[formcontrolname="gender"]').dispatchEvent(new Event('change'));
                 }
 
-                if(document.querySelector('*[formcontrolname="autoUpgradation"]')){
-                    document.querySelector('*[formcontrolname="autoUpgradation"]').checked = autoUp;
+                if(document.querySelector('*[formcontrolname="autoUpgradationSelected"]')){
+                    document.querySelector('*[formcontrolname="autoUpgradationSelected"]').checked = autoUp;
                 }
+                /*
                 document.querySelector('#travelInsuranceOptedYes').checked = true;
-                document.querySelector('#travelInsuranceOptedYes').dispatchEvent(new Event('change'));
+                document.querySelector('#travelInsuranceOptedYes').dispatchEvent(new Event('change'));*/
 
                 if(mobNo.trim() != '') {
                     document.querySelector('*[formcontrolname="mobileNumber"]').value = mobNo;
                 }
 
                 if(document.querySelector('*[formcontrolname="captcha"]')){
-                    document.querySelector('*[formcontrolname="captcha"]').focus();    
+                    document.querySelector('*[formcontrolname="captcha"]').focus();
                 }
                 else if(document.querySelector('#nlpAnswer')){
                     document.querySelector('#nlpAnswer').focus();
                 }
-                
+
             })()`.replace(/[\r\n\t]+/gm,'')
         );
     }
-    
+
 
     document.getElementById('genAuto').onclick = function(e) {
         document.getElementById('txtAuto').value = genAutofill();
